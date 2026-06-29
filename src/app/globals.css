@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 255 255 255;
+    --bg-subtle: 248 250 252;
+    --fg: 16 26 87;
+    --muted: 71 85 105;
+    --border: 226 232 240;
+    --card: 255 255 255;
+  }
+
+  .dark {
+    --bg: 8 11 28;
+    --bg-subtle: 13 17 38;
+    --fg: 237 242 255;
+    --muted: 148 163 199;
+    --border: 30 38 72;
+    --card: 14 19 42;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--fg));
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: rgb(47 95 255 / 0.22);
+  }
+
+  /* Visible, consistent keyboard focus across the page */
+  :focus-visible {
+    outline: 2px solid rgb(47 95 255);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply container mx-auto;
+  }
+
+  .text-muted {
+    color: rgb(var(--muted));
+  }
+
+  .surface {
+    background-color: rgb(var(--card));
+    border-color: rgb(var(--border));
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-200/70 bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-600 via-brand-500 to-accent-500 bg-clip-text text-transparent dark:from-brand-300 dark:via-brand-400 dark:to-accent-400;
+  }
+
+  /* Pause marquee-style animations on hover for a calmer reading experience */
+  .pause-on-hover:hover {
+    animation-play-state: paused;
+  }
+
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+  }
+}

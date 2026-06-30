@@ -9,10 +9,13 @@ import { MotionButton } from "@/components/ui/MotionButton";
 import { Icon } from "@/components/ui/Icon";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { useSession } from "@/lib/useSession";
+import { clearSession } from "@/lib/auth";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const session = useSession();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -59,15 +62,36 @@ export function Navbar() {
 
         <div className="hidden items-center gap-2.5 md:flex">
           <ThemeToggle />
-          <Link
-            href="#footer"
-            className="rounded-full px-4 py-2 text-sm font-semibold text-muted transition-colors hover:text-[rgb(var(--fg))]"
-          >
-            Log in
-          </Link>
-          <MotionButton href="#courses" size="md">
-            Start free
-          </MotionButton>
+          {session ? (
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-2 text-sm font-medium text-[rgb(var(--fg))]">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-brand-500 to-violet-600 text-xs font-bold text-white">
+                  {session.name.charAt(0).toUpperCase()}
+                </span>
+                {session.name.split(" ")[0]}
+              </span>
+              <button
+                type="button"
+                onClick={() => clearSession()}
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-muted transition-colors hover:text-[rgb(var(--fg))]"
+              >
+                <Icon name="logout" size={16} />
+                Log out
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="rounded-full px-4 py-2 text-sm font-semibold text-muted transition-colors hover:text-[rgb(var(--fg))]"
+              >
+                Log in
+              </Link>
+              <MotionButton href="/register" size="md">
+                Start free
+              </MotionButton>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -130,12 +154,37 @@ export function Navbar() {
           ))}
 
           <div className="mt-4 flex flex-col gap-3 border-t border-[rgb(var(--border))] pt-5">
-            <MotionButton href="#footer" variant="secondary" onClick={() => setOpen(false)}>
-              Log in
-            </MotionButton>
-            <MotionButton href="#courses" onClick={() => setOpen(false)}>
-              Start free
-            </MotionButton>
+            {session ? (
+              <>
+                <div className="flex items-center gap-2.5 px-1">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-brand-500 to-violet-600 text-sm font-bold text-white">
+                    {session.name.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="text-sm font-medium text-[rgb(var(--fg))]">
+                    {session.name}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearSession();
+                    setOpen(false);
+                  }}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[rgb(var(--border))] px-4 py-2.5 text-sm font-semibold text-[rgb(var(--fg))]"
+                >
+                  <Icon name="logout" size={16} /> Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <MotionButton href="/login" variant="secondary" onClick={() => setOpen(false)}>
+                  Log in
+                </MotionButton>
+                <MotionButton href="/register" onClick={() => setOpen(false)}>
+                  Start free
+                </MotionButton>
+              </>
+            )}
           </div>
             </motion.div>
           </div>

@@ -80,7 +80,7 @@ export function Hero() {
             variants={fadeUp}
             className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
           >
-            <MotionButton href="#courses" size="lg" variant="primary">
+            <MotionButton href="/register" size="lg" variant="primary">
               Start preparing free
               <Icon name="arrow" size={18} />
             </MotionButton>

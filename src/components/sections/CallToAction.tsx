@@ -46,7 +46,7 @@ export function CallToAction() {
               </p>
 
               <div className="relative mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <MotionButton href="#courses" size="lg" variant="primary">
+                <MotionButton href="/register" size="lg" variant="primary">
                   Start preparing free
                   <Icon name="arrow" size={18} />
                 </MotionButton>

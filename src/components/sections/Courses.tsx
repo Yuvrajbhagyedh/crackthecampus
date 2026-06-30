@@ -103,7 +103,7 @@ export function Courses() {
 
                 <div className="mt-7 pt-1">
                   <MotionButton
-                    href="#footer"
+                    href="/register"
                     variant={course.featured ? "primary" : "secondary"}
                     className="w-full"
                   >

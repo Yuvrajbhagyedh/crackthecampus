@@ -7,7 +7,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { useRef, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { easeOutExpo, springSoft } from "@/lib/motion";
 
@@ -31,6 +31,11 @@ export function HeroVisual() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const score = 78;
+  // Drives a plain CSS height transition for the weekly bars — avoids
+  // framer's percentage-height keyframe, which can settle flat depending on
+  // hydration timing in a nested flex layout.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const radius = 30;
   const circumference = 2 * Math.PI * radius;
 
@@ -141,14 +146,16 @@ export function HeroVisual() {
               {week.map((bar, i) => (
                 <div key={i} className="flex flex-1 flex-col items-center gap-2">
                   <div className="flex w-full flex-1 items-end">
-                    <motion.div
-                      initial={reduce ? false : { height: 0 }}
-                      animate={{ height: `${bar.value}%` }}
-                      transition={{ duration: 0.7, delay: 0.5 + i * 0.07, ease: easeOutExpo }}
+                    <div
+                      style={{
+                        height: mounted || reduce ? `${bar.value}%` : "4%",
+                        transitionDelay: reduce ? "0ms" : `${300 + i * 70}ms`,
+                      }}
                       className={
-                        i === week.length - 1
+                        (i === week.length - 1
                           ? "w-full rounded-md bg-gradient-to-t from-brand-600 to-violet-500"
-                          : "w-full rounded-md bg-brand-500/25"
+                          : "w-full rounded-md bg-brand-500/25") +
+                        " transition-[height] duration-700 ease-out"
                       }
                     />
                   </div>

@@ -5,20 +5,20 @@
 @layer base {
   :root {
     --bg: 255 255 255;
-    --bg-subtle: 248 250 252;
-    --fg: 16 26 87;
-    --muted: 71 85 105;
-    --border: 226 232 240;
+    --bg-subtle: 248 249 252;
+    --fg: 9 11 17;
+    --muted: 90 96 112;
+    --border: 226 228 236;
     --card: 255 255 255;
   }
 
   .dark {
-    --bg: 8 11 28;
-    --bg-subtle: 13 17 38;
-    --fg: 237 242 255;
-    --muted: 148 163 199;
-    --border: 30 38 72;
-    --card: 14 19 42;
+    --bg: 4 5 12;
+    --bg-subtle: 9 10 20;
+    --fg: 240 242 255;
+    --muted: 140 145 175;
+    --border: 32 34 52;
+    --card: 12 13 24;
   }
 
   html {
@@ -33,12 +33,11 @@
   }
 
   ::selection {
-    background-color: rgb(47 95 255 / 0.22);
+    background-color: rgb(139 92 246 / 0.28);
   }
 
-  /* Visible, consistent keyboard focus across the page */
   :focus-visible {
-    outline: 2px solid rgb(47 95 255);
+    outline: 2px solid rgb(99 102 241);
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -71,17 +70,53 @@
     border-color: rgb(var(--border));
   }
 
+  .glass {
+    @apply border border-white/40 bg-white/55 backdrop-blur-xl dark:border-white/[0.08] dark:bg-white/[0.04];
+  }
+
+  .glass-card {
+    @apply border border-white/50 bg-white/70 backdrop-blur-2xl dark:border-white/[0.1] dark:bg-[rgb(var(--card))]/80;
+  }
+
   .eyebrow {
     @apply inline-flex items-center gap-2 rounded-full border border-brand-200/70 bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300;
+  }
+
+  .eyebrow-glow {
+    @apply eyebrow border-brand-400/30 bg-gradient-to-r from-brand-500/10 via-violet-500/10 to-fuchsia-500/10 shadow-[0_0_24px_-6px_rgb(99_102_241/0.35)];
   }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-brand-600 via-brand-500 to-accent-500 bg-clip-text text-transparent dark:from-brand-300 dark:via-brand-400 dark:to-accent-400;
+    @apply bg-gradient-to-r from-brand-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent dark:from-brand-300 dark:via-violet-300 dark:to-fuchsia-300;
   }
 
-  /* Pause marquee-style animations on hover for a calmer reading experience */
+  .text-gradient-vivid {
+    @apply bg-gradient-to-r from-brand-500 via-violet-500 to-fuchsia-400 bg-clip-text text-transparent dark:from-brand-300 dark:via-violet-300 dark:to-fuchsia-300;
+    background-size: 200% auto;
+    animation: gradient-shift 4s ease-in-out infinite;
+  }
+
+  .bg-gradient-conic {
+    background: conic-gradient(
+      from 0deg,
+      rgb(99 102 241),
+      rgb(168 85 247),
+      rgb(34 211 238),
+      rgb(16 185 129),
+      rgb(99 102 241)
+    );
+  }
+
+  .bg-mesh {
+    background-image:
+      radial-gradient(at 0% 0%, rgb(99 102 241 / 0.18) 0, transparent 50%),
+      radial-gradient(at 100% 0%, rgb(168 85 247 / 0.14) 0, transparent 50%),
+      radial-gradient(at 100% 100%, rgb(34 211 238 / 0.1) 0, transparent 50%),
+      radial-gradient(at 0% 100%, rgb(99 102 241 / 0.12) 0, transparent 50%);
+  }
+
   .pause-on-hover:hover {
     animation-play-state: paused;
   }
@@ -101,5 +136,15 @@
       black 92%,
       transparent
     );
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
   }
 }

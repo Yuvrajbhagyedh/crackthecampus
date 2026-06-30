@@ -52,19 +52,15 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#080b1c" },
-  ],
+  themeColor: "#ffffff",
 };
 
 // Set the theme before paint to avoid a flash of the wrong colour scheme.
+// The site is white-first: light is the default and dark is opt-in only.
 const themeScript = `
 (function () {
   try {
-    var stored = localStorage.getItem('ctc-theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (stored === 'dark' || (!stored && prefersDark)) {
+    if (localStorage.getItem('ctc-theme') === 'dark') {
       document.documentElement.classList.add('dark');
     }
   } catch (e) {}

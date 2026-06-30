@@ -186,21 +186,6 @@ export function HeroVisual() {
 
         </div>
       </motion.div>
-
-      {/* Single floating proof pill — offset into the gutter, never over content */}
-      <motion.div
-        animate={reduce ? undefined : { y: [0, 10, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="glass absolute -bottom-5 -left-4 hidden items-center gap-2.5 rounded-2xl px-3.5 py-2.5 shadow-neon sm:flex lg:-left-8"
-      >
-        <span className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-accent-500 to-emerald-400 text-white">
-          <Icon name="check" size={16} />
-        </span>
-        <div>
-          <p className="text-sm font-bold leading-none">Offer secured</p>
-          <p className="mt-0.5 text-[11px] text-muted">SDE · ₹12 LPA</p>
-        </div>
-      </motion.div>
     </div>
   );
 }

@@ -1,11 +1,11 @@
 # CrackTheCampus — Landing Page
 
-A high-converting marketing landing page for **CrackTheCampus**, a platform that
-helps students prepare for placements, internships and competitive aptitude
-tests. Built from scratch with Next.js, Tailwind CSS and Framer Motion — no UI
-kits, no design templates, no cloned references.
+A marketing landing page for **CrackTheCampus**, a platform that helps students
+prepare for placements, internships and competitive aptitude tests. Built from
+scratch with Next.js, Tailwind CSS and Framer Motion. No UI kits, no design
+templates, no cloned references.
 
-🔗 **Live demo:** _add your deployment URL here (Vercel / Netlify)_
+**Live demo:** _add your deployment URL here (Vercel / Netlify)_
 
 ---
 
@@ -178,19 +178,19 @@ Designed mobile-first and verified across breakpoints:
 
 ## Extra features (beyond the brief)
 
-- 🎬 **Framer Motion micro-interactions** — staggered scroll reveals, a 3D-tilt
+- **Framer Motion micro-interactions** — staggered scroll reveals, a 3D-tilt
   hero card, hover/tap spring buttons with a shimmer sweep, animated gradient
   borders and an animated stat counter.
-- 🔤 **Rolling-word headline** — a vertical word carousel in the hero.
-- 🌗 **Dark / light mode** — white-first with a no-flash theme script and
+- **Rolling-word headline** — a vertical word carousel in the hero.
+- **Dark / light mode** — white-first, with a no-flash theme script and
   `localStorage` persistence; dark is opt-in.
-- 💀 **Loading skeletons** — route-level shimmer skeleton via `app/loading.tsx`.
-- 🎞️ **Auto-scrolling partner marquee** and ambient **aurora-orb** background.
-- 📱 **Accessible mobile drawer** with body-scroll lock and `aria` wiring.
-- 🧩 **Hand-built SVG illustration** (hero product preview) — zero image payload.
-- 🔍 **SEO foundations** — metadata, Open Graph/Twitter cards, `robots.txt`,
+- **Loading skeletons** — route-level shimmer skeleton via `app/loading.tsx`.
+- **Auto-scrolling partner marquee** and an ambient aurora-orb background.
+- **Accessible mobile drawer** with body-scroll lock and `aria` wiring.
+- **Hand-built SVG illustration** (the hero product preview) — zero image payload.
+- **SEO foundations** — metadata, Open Graph/Twitter cards, `robots.txt`,
   `sitemap.xml` and a favicon.
-- ♿ **Accessibility** — skip link, semantic landmarks, visible focus states,
-  labelled controls, `aria-live` headline and keyboard-friendly navigation.
-- ⚡ **Reduced-motion aware** — every animation respects `prefers-reduced-motion`.
+- **Accessibility** — skip link, semantic landmarks, visible focus states,
+  labelled controls, an `aria-live` headline and keyboard-friendly navigation.
+- **Reduced-motion aware** — every animation respects `prefers-reduced-motion`.
 ```

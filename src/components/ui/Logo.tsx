@@ -3,12 +3,13 @@ import { cn } from "@/lib/utils";
 
 type LogoProps = {
   className?: string;
+  href?: string;
 };
 
-export function Logo({ className }: LogoProps) {
+export function Logo({ className, href = "#top" }: LogoProps) {
   return (
     <Link
-      href="#top"
+      href={href}
       aria-label="CrackTheCampus home"
       className={cn(
         "group inline-flex items-center gap-2.5 rounded-lg font-display text-lg font-bold tracking-tight",

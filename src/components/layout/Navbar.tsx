@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import { primaryNav } from "@/data/navigation";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/Button";
+import { MotionButton } from "@/components/ui/MotionButton";
 import { Icon } from "@/components/ui/Icon";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -31,10 +32,10 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 border-b transition-all duration-300",
         scrolled
-          ? "border-b border-[rgb(var(--border))] bg-[rgb(var(--bg))]/80 backdrop-blur-xl"
-          : "border-b border-transparent",
+          ? "border-[rgb(var(--border))] bg-[rgb(var(--bg))]/80 backdrop-blur-xl"
+          : "border-transparent bg-transparent",
       )}
     >
       <nav
@@ -64,9 +65,9 @@ export function Navbar() {
           >
             Log in
           </Link>
-          <Button href="#courses" size="md">
+          <MotionButton href="#courses" size="md">
             Start free
-          </Button>
+          </MotionButton>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -84,28 +85,27 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile drawer */}
-      <div
-        id="mobile-menu"
-        className={cn(
-          "fixed inset-0 z-50 md:hidden",
-          open ? "pointer-events-auto" : "pointer-events-none",
-        )}
-        aria-hidden={!open}
-      >
-        <div
-          onClick={() => setOpen(false)}
-          className={cn(
-            "absolute inset-0 bg-slate-950/50 backdrop-blur-sm transition-opacity duration-300",
-            open ? "opacity-100" : "opacity-0",
-          )}
-        />
-        <div
-          className={cn(
-            "absolute right-0 top-0 flex h-full w-[min(20rem,82vw)] flex-col gap-1 border-l border-[rgb(var(--border))] bg-[rgb(var(--bg))] p-6 shadow-2xl transition-transform duration-300 ease-out",
-            open ? "translate-x-0" : "translate-x-full",
-          )}
-        >
+      <AnimatePresence>
+        {open && (
+          <div
+            id="mobile-menu"
+            className="fixed inset-0 z-50 md:hidden"
+            aria-hidden={!open}
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
+              className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 320, damping: 32 }}
+              className="absolute right-0 top-0 flex h-full w-[min(20rem,82vw)] flex-col gap-1 border-l border-[rgb(var(--border))] bg-[rgb(var(--bg))] p-6 shadow-2xl"
+            >
           <div className="mb-4 flex items-center justify-between">
             <Logo />
             <button
@@ -130,15 +130,17 @@ export function Navbar() {
           ))}
 
           <div className="mt-4 flex flex-col gap-3 border-t border-[rgb(var(--border))] pt-5">
-            <Button href="#footer" variant="secondary" onClick={() => setOpen(false)}>
+            <MotionButton href="#footer" variant="secondary" onClick={() => setOpen(false)}>
               Log in
-            </Button>
-            <Button href="#courses" onClick={() => setOpen(false)}>
+            </MotionButton>
+            <MotionButton href="#courses" onClick={() => setOpen(false)}>
               Start free
-            </Button>
+            </MotionButton>
           </div>
-        </div>
-      </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

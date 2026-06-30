@@ -76,10 +76,13 @@ crackthecampus/
 │   │   ├── layout.tsx         # Root layout, fonts, metadata, no-flash theme script
 │   │   ├── loading.tsx        # Route-level skeleton loading UI
 │   │   ├── page.tsx           # Assembles the sections in order
+│   │   ├── login/page.tsx     # Login route
+│   │   ├── register/page.tsx  # Register route
 │   │   ├── icon.svg           # Favicon
 │   │   ├── robots.ts          # SEO: robots.txt
 │   │   └── sitemap.ts         # SEO: sitemap.xml
 │   ├── components/
+│   │   ├── auth/              # AuthShell, AuthField, Login/Register forms, SubmitButton
 │   │   ├── layout/
 │   │   │   ├── Navbar.tsx      # Sticky nav + animated mobile drawer
 │   │   │   └── Footer.tsx      # Nav columns, contact, socials
@@ -107,6 +110,8 @@ crackthecampus/
 │   │   ├── content.ts         # Features, stats, testimonials, companies, courses
 │   │   └── navigation.ts      # Header + footer links
 │   └── lib/
+│       ├── auth.ts            # Mock client-side auth (localStorage)
+│       ├── useSession.ts      # Session hook for the navbar
 │       ├── motion.ts          # Shared Framer Motion presets
 │       └── utils.ts           # cn() classname helper
 ├── tailwind.config.ts
@@ -164,9 +169,14 @@ Designed mobile-first and verified across breakpoints:
 
 ## Assumptions
 
-- This is a **marketing landing page only** — the CTAs (“Start free”, “Log in”,
-  “Explore track”) link to in-page anchors as placeholders for real
-  authentication/checkout routes that would exist in the full product.
+- The **login and register pages are fully functional on the client** — real
+  validation, password visibility toggles, loading/error states and a session
+  that persists in `localStorage` and reflects in the navbar. Because there is
+  no backend, auth is **mocked**: accounts and the active session live in
+  `localStorage` (`src/lib/auth.ts`). It is deliberately not production auth —
+  it exists to make the flow feel real for the demo.
+- Other CTAs (“Explore track”, footer links) point to the relevant in-page
+  section or the register route as placeholders for the full product.
 - All metrics, testimonials and student names are **representative sample
   content** for demonstration, not real user data.
 - Company names are rendered as plain text wordmarks (not official logo assets)
@@ -178,6 +188,9 @@ Designed mobile-first and verified across breakpoints:
 
 ## Extra features (beyond the brief)
 
+- **Working login & register pages** — split-screen layout, real client-side
+  validation, password visibility toggles, loading/error states and a session
+  that persists and reflects in the navbar (mocked auth, see Assumptions).
 - **Framer Motion micro-interactions** — staggered scroll reveals, a 3D-tilt
   hero card, hover/tap spring buttons with a shimmer sweep, animated gradient
   borders and an animated stat counter.

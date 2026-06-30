@@ -5,7 +5,7 @@ prepare for placements, internships and competitive aptitude tests. Built from
 scratch with Next.js, Tailwind CSS and Framer Motion. No UI kits, no design
 templates, no cloned references.
 
-**Live demo:** _add your deployment URL here (Vercel / Netlify)_
+**Live demo:** https://crackthecampus-nv2q0uohf-yuvrajbhagyedhs-projects.vercel.app
 
 ---
 

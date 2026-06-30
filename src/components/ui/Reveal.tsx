@@ -1,62 +1,44 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { ElementType, ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { easeOutExpo, fadeUp } from "@/lib/motion";
 
 type RevealProps = {
   children: ReactNode;
   className?: string;
-  /** Stagger delay in milliseconds for list items. */
+  /** Stagger delay in milliseconds. */
   delay?: number;
-  as?: ElementType;
+  /** Slide distance in px — larger = more dramatic entrance. */
+  distance?: number;
 };
 
-/**
- * Reveals its children with a subtle fade-up the first time they scroll into
- * view. Honors prefers-reduced-motion by rendering immediately.
- */
-export function Reveal({ children, className, delay = 0, as: Tag = "div" }: RevealProps) {
-  const ref = useRef<HTMLElement | null>(null);
-  const [visible, setVisible] = useState(false);
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+  distance = 40,
+}: RevealProps) {
+  const reduce = useReducedMotion();
 
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+  if (reduce) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
-    <Tag
-      ref={ref}
-      style={visible ? { animationDelay: `${delay}ms` } : undefined}
-      className={cn(
-        "transition-opacity",
-        visible ? "animate-fade-up" : "opacity-0",
-        className,
-      )}
+    <motion.div
+      initial={{ ...fadeUp.hidden, y: distance }}
+      whileInView={{ ...fadeUp.visible, y: 0 }}
+      viewport={{ once: true, margin: "-50px 0px -80px 0px", amount: 0.2 }}
+      transition={{
+        duration: 0.75,
+        delay: delay / 1000,
+        ease: easeOutExpo,
+      }}
+      className={cn(className)}
     >
       {children}
-    </Tag>
+    </motion.div>
   );
 }

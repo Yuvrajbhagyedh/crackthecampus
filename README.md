@@ -2,8 +2,8 @@
 
 A high-converting marketing landing page for **CrackTheCampus**, a platform that
 helps students prepare for placements, internships and competitive aptitude
-tests. Built from scratch with Next.js and Tailwind CSS — no UI kits, no design
-templates, no cloned references.
+tests. Built from scratch with Next.js, Tailwind CSS and Framer Motion — no UI
+kits, no design templates, no cloned references.
 
 🔗 **Live demo:** _add your deployment URL here (Vercel / Netlify)_
 
@@ -16,9 +16,9 @@ templates, no cloned references.
 | Framework      | Next.js 14 (App Router, React Server Components)     |
 | Language       | TypeScript (strict mode)                            |
 | Styling        | Tailwind CSS 3 with a small custom design system     |
+| Animation      | Framer Motion                                       |
 | Fonts          | `next/font` (Inter for body, Sora for display)       |
 | Icons / art    | Hand-built inline SVG (no icon library, no images)   |
-| Deployment     | Static export friendly — deploy to any host          |
 
 ---
 
@@ -27,34 +27,39 @@ templates, no cloned references.
 The page is composed of **isolated, reusable components** grouped by
 responsibility:
 
-- **`ui/`** — design-system primitives (`Button`, `Icon`, `SectionHeading`,
-  `Reveal`, `ThemeToggle`, `Logo`). These have no business knowledge and are
-  reused everywhere.
+- **`ui/`** — design-system primitives (`MotionButton`, `Icon`, `Logo`,
+  `RollingText`, `Reveal`, `SectionHeading`, `ThemeToggle`, `AuroraOrbs`,
+  `Skeleton`). These have no business knowledge and are reused everywhere.
 - **`sections/`** — one component per landing-page section. Each section reads
   its content from **`data/`**, so copy and layout stay decoupled and there is
   zero hard-coded duplication in the markup.
-- **`layout/`** — the `Navbar` (with a scroll-aware state and an accessible
-  mobile drawer) and the `Footer`.
+- **`layout/`** — the `Navbar` (scroll-aware, with an accessible mobile drawer)
+  and the `Footer`.
 - **`data/`** — all marketing copy (features, stats, testimonials, companies,
   courses, navigation). Editing the page is a content change, not a code change.
+- **`lib/`** — `utils.ts` (`cn` class combiner) and `motion.ts` (shared Framer
+  Motion presets so animation feel stays consistent sitewide).
 
 Design decisions worth calling out:
 
-- **Theming via CSS variables.** Light/dark colours are defined as RGB channel
-  variables in `globals.css` and consumed through Tailwind. An inline script in
-  `layout.tsx` applies the saved theme **before paint** to avoid a flash of the
-  wrong colour scheme.
-- **Performance first.** Server Components by default; only the genuinely
-  interactive pieces (`Navbar`, `ThemeToggle`, `Reveal`, `CountUp`) are client
-  components. First-load JS is ~100 kB and there are no raster image requests —
-  every illustration is inline SVG/markup.
-- **Motion that respects the user.** Scroll-reveal and count-up animations use a
-  single shared `IntersectionObserver` pattern and fully honour
-  `prefers-reduced-motion`.
+- **White-first theme.** The palette is white-dominant with near-black ink and
+  vivid indigo→violet→fuchsia→cyan accents. Light is the default; dark mode is
+  opt-in via the toggle. Colours are CSS-variable tokens in `globals.css`, and
+  an inline script in `layout.tsx` applies the saved theme **before paint** to
+  avoid a flash of the wrong colour scheme.
+- **Motion with restraint.** Framer Motion powers staggered scroll reveals, a
+  rolling-word headline, an animated stat counter, a 3D-tilt hero card, a
+  partner marquee and drifting aurora orbs — all gated behind
+  `prefers-reduced-motion`, which short-circuits to static markup.
+- **Performance first.** Server Components by default; only genuinely
+  interactive pieces are client components. First-load JS is ~100 kB and there
+  are no raster image requests — every illustration is inline SVG/markup.
+- **Loading skeletons.** `app/loading.tsx` renders a shimmering skeleton of the
+  navbar + hero instantly while the route streams in.
 - **Accessibility baked in.** Semantic landmarks (`header`/`main`/`section`/
   `nav`/`footer`), a skip-to-content link, labelled icon buttons, visible focus
-  rings, `aria-expanded`/`aria-controls` on the menu, and screen-reader text for
-  decorative numbers.
+  rings, `aria-expanded`/`aria-controls` on the menu, `aria-live` on the rolling
+  headline, and screen-reader text for animated numbers.
 - **SEO foundations.** Rich metadata + Open Graph/Twitter tags, a generated
   `robots.txt` and `sitemap.xml`, and an SVG favicon.
 
@@ -69,17 +74,18 @@ crackthecampus/
 │   ├── app/
 │   │   ├── globals.css        # Tailwind layers + theme tokens + base styles
 │   │   ├── layout.tsx         # Root layout, fonts, metadata, no-flash theme script
+│   │   ├── loading.tsx        # Route-level skeleton loading UI
 │   │   ├── page.tsx           # Assembles the sections in order
 │   │   ├── icon.svg           # Favicon
 │   │   ├── robots.ts          # SEO: robots.txt
 │   │   └── sitemap.ts         # SEO: sitemap.xml
 │   ├── components/
 │   │   ├── layout/
-│   │   │   ├── Navbar.tsx      # Sticky nav + mobile drawer
+│   │   │   ├── Navbar.tsx      # Sticky nav + animated mobile drawer
 │   │   │   └── Footer.tsx      # Nav columns, contact, socials
 │   │   ├── sections/
 │   │   │   ├── Hero.tsx
-│   │   │   ├── HeroVisual.tsx  # Hand-built product-preview mockup
+│   │   │   ├── HeroVisual.tsx  # Hand-built product-preview card
 │   │   │   ├── Features.tsx
 │   │   │   ├── Stats.tsx
 │   │   │   ├── CountUp.tsx     # Animated number counter
@@ -88,16 +94,20 @@ crackthecampus/
 │   │   │   ├── Companies.tsx   # Logo marquee
 │   │   │   └── CallToAction.tsx
 │   │   └── ui/
-│   │       ├── Button.tsx
+│   │       ├── AuroraOrbs.tsx  # Ambient animated background
 │   │       ├── Icon.tsx        # Inline SVG icon set
 │   │       ├── Logo.tsx
+│   │       ├── MotionButton.tsx
 │   │       ├── Reveal.tsx      # Scroll-reveal wrapper
+│   │       ├── RollingText.tsx # Vertical rolling-word carousel
 │   │       ├── SectionHeading.tsx
+│   │       ├── Skeleton.tsx    # Shimmer placeholder
 │   │       └── ThemeToggle.tsx
 │   ├── data/
 │   │   ├── content.ts         # Features, stats, testimonials, companies, courses
 │   │   └── navigation.ts      # Header + footer links
 │   └── lib/
+│       ├── motion.ts          # Shared Framer Motion presets
 │       └── utils.ts           # cn() classname helper
 ├── tailwind.config.ts
 ├── tsconfig.json
@@ -110,11 +120,12 @@ crackthecampus/
 
 ## Sections
 
-1. **Hero** — headline, value proposition, primary + secondary CTAs and a
-   hand-built product-preview visual with floating stat badges.
+1. **Hero** — rolling-word headline, value proposition, primary + secondary
+   CTAs, and a hand-built product-preview card with a radial score ring, a
+   weekly-scores chart and skill bars.
 2. **Companies** — auto-scrolling marquee of hiring partners.
 3. **Features** — six core capabilities in a responsive card grid.
-4. **Stats** — key success metrics with an animated count-up.
+4. **Stats** — key success metrics with an animated count-up on a near-black band.
 5. **Courses / Test Series** — three preparation tracks, one highlighted.
 6. **Testimonials** — student success stories with ratings.
 7. **Call to action** — closing conversion band.
@@ -144,9 +155,10 @@ npm run start
 
 Designed mobile-first and verified across breakpoints:
 
-- **Mobile** — single-column layout, hamburger menu opening a slide-in drawer.
-- **Tablet** — two-column feature/testimonial grids.
-- **Desktop** — full multi-column layouts with the hero split into copy + visual.
+- **Mobile** — single-column layout, hamburger menu opening an animated slide-in
+  drawer with a dimmed backdrop and body-scroll lock.
+- **Tablet** — two-column feature/testimonial grids, full navbar.
+- **Desktop** — hero splits into copy + visual; three-column course grid.
 
 ---
 
@@ -166,17 +178,19 @@ Designed mobile-first and verified across breakpoints:
 
 ## Extra features (beyond the brief)
 
-- 🌗 **Dark / light mode** with a no-flash theme script and `localStorage`
-  persistence that also respects the OS preference.
-- ✨ **Scroll-reveal animations** and an **animated stat counter**, both
-  gated behind `prefers-reduced-motion`.
-- 🎞️ **Auto-scrolling partner marquee** that pauses on hover.
+- 🎬 **Framer Motion micro-interactions** — staggered scroll reveals, a 3D-tilt
+  hero card, hover/tap spring buttons with a shimmer sweep, animated gradient
+  borders and an animated stat counter.
+- 🔤 **Rolling-word headline** — a vertical word carousel in the hero.
+- 🌗 **Dark / light mode** — white-first with a no-flash theme script and
+  `localStorage` persistence; dark is opt-in.
+- 💀 **Loading skeletons** — route-level shimmer skeleton via `app/loading.tsx`.
+- 🎞️ **Auto-scrolling partner marquee** and ambient **aurora-orb** background.
 - 📱 **Accessible mobile drawer** with body-scroll lock and `aria` wiring.
-- 🧩 **Hand-built SVG illustration** (hero product preview) — zero image
-  payload, perfectly crisp on any display.
+- 🧩 **Hand-built SVG illustration** (hero product preview) — zero image payload.
 - 🔍 **SEO foundations** — metadata, Open Graph/Twitter cards, `robots.txt`,
   `sitemap.xml` and a favicon.
 - ♿ **Accessibility** — skip link, semantic landmarks, visible focus states,
-  labelled controls and keyboard-friendly navigation.
-- ⚡ **Lean bundle** — ~100 kB first-load JS, mostly static pre-rendered HTML.
+  labelled controls, `aria-live` headline and keyboard-friendly navigation.
+- ⚡ **Reduced-motion aware** — every animation respects `prefers-reduced-motion`.
 ```
